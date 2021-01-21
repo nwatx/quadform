@@ -1,65 +1,201 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { useState } from "react";
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import {
+    AlertIcon,
+    Button,
+    Center,
+    Flex,
+    Grid,
+    GridItem,
+    Text,
+} from "@chakra-ui/react";
+import {
+    InputGroup,
+    InputLeftAddon,
+    FormControl,
+    FormLabel,
+} from "@chakra-ui/react";
+import {
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
+    Slider,
+    SliderTrack,
+    SliderFilledTrack,
+    SliderThumb,
+    Alert,
+    Box,
+} from "@chakra-ui/react";
+
+import "katex/dist/katex.min.css";
+import Latex from "react-latex-next";
 
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    const [a, setA] = useState(0);
+    const [b, setB] = useState(0);
+    const [c, setC] = useState(0);
+    const [error, setError] = useState("");
+    const [precision, setPrecision] = useState(3);
+    const [answer, setAnswer] = useState("");
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+    const formatNumber = (num) => {
+        return Number(Number(num).toFixed(precision)).toString();
+    };
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+    const handleSubmit = () => {
+        setError("");
+        setAnswer("");
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        if (!(a && b && c)) {
+            return setError("Please enter in all your numbers");
+        }
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+        if (isNaN(a) || isNaN(b) || isNaN(c)) {
+            return setError(
+                "Please make sure your numbers are entered in correctly."
+            );
+        }
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+        const det = calculateDeterminant();
+        if (det > 0) {
+            setAnswer(
+                `$$=\\frac{-${formatNumber(b)} \\pm \\sqrt{${formatNumber(
+                    b
+                )}^2-4(${formatNumber(a)})(${formatNumber(
+                    c
+                )})}}{2(${formatNumber(a)})}$$
+                 $$=\\frac{-${b} \\pm ${formatNumber(
+                    Math.sqrt(b * b - 4 * a * c)
+                )}}{${formatNumber(2 * a)}}$$
+                 $$x_1 = ${formatNumber(
+                     -b + Math.sqrt(b * b - 4 * a * c) / 2
+                 )}, x_2 =${formatNumber(
+                    -b - Math.sqrt(b * b - 4 * a * c) / 2
+                )}$$`
+            );
+        } else if (det == 0) {
+            setAnswer(
+                `$$=\\frac{-${formatNumber(b)}}{2(${formatNumber(a)})}$$
+                 $$=\\frac{-${b}}{${formatNumber(2 * a)}}$$
+                 $$x = ${formatNumber((-b / 2) * a)}$$`
+            );
+        } else {
+            setAnswer(
+                "There are no real solutions because the determinant is negative"
+            );
+        }
+    };
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+    const calculateDeterminant = () => {
+        // console.log(b * b - 4 * a * c);
+        return b * b - 4 * a * c;
+    };
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+    return (
+        <Center>
+            <Grid
+                w={["100%", "30%"]}
+                autoRows
+                bg="primary"
+                m={1}
+                gap={1}
+            >
+                <Box w="100%" borderWidth="2px" borderRadius='md' shadow='md' m={5} pt={10} pb={5} px={10}>
+                    <Center>
+                        <GridItem rowSpan={1}>
+                            <Text fontSize="4xl" color="red.400">
+                                <b>Simple Quadform Calculator</b>
+                            </Text>
+                        </GridItem>
+                    </Center>
+                    <GridItem rowSpan={1} margin={1}>
+                        <Latex>
+                            {"$$ax^2+bx+c$$$$\\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$"}
+                        </Latex>
+                    </GridItem>
+                    <GridItem>
+                        <Center>
+                            <Text fontSize="2xl">Set precision</Text>
+                        </Center>
+                        <NumberInput
+                            maxW="50px"
+                            mr="2rem"
+                            value={precision}
+                            onChange={(e) => setPrecision(e)}
+                        >
+                            <NumberInputField />
+                        </NumberInput>
+                        <Slider
+                            margin={2}
+                            flex
+                            value={precision}
+                            onChange={(e) => setPrecision(e)}
+                            defaultValue={3}
+                            min={0}
+                            max={10}
+                            colorScheme="red"
+                        >
+                            <SliderTrack>
+                                <SliderFilledTrack />
+                            </SliderTrack>
+                            <SliderThumb fontSize="sm" boxSize="32px" border />
+                        </Slider>
+                    </GridItem>
+                    <Center>
+                        <GridItem colSpan={1} rowSpan={1}>
+                            <FormControl id="amount">
+                                <InputGroup m={2}>
+                                    <FormLabel>a</FormLabel>
+                                    <NumberInput onChange={(e) => setA(e)}>
+                                        <NumberInputField />
+                                    </NumberInput>
+                                </InputGroup>
+                                <InputGroup m={2}>
+                                    <FormLabel>b</FormLabel>
+                                    <NumberInput onChange={(e) => setB(e)}>
+                                        <NumberInputField />
+                                    </NumberInput>
+                                </InputGroup>
+                                <InputGroup m={2}>
+                                    <FormLabel>c</FormLabel>
+                                    <NumberInput onChange={(e) => setC(e)}>
+                                        <NumberInputField />
+                                    </NumberInput>
+                                </InputGroup>
+                                <Center>
+                                    <Button
+                                        mt={2}
+                                        colorScheme="red"
+                                        type="submit"
+                                        onClick={handleSubmit}
+                                    >
+                                        Calculate
+                                    </Button>
+                                </Center>
+                            </FormControl>
+                        </GridItem>
+                    </Center>
+                    {error && (
+                        <Center>
+                            <GridItem rowSpan={1} m={5}>
+                                <Alert status="error" rounded={"md"}>
+                                    <AlertIcon />
+                                    Please check that you have entered in the
+                                    numbers correctly
+                                </Alert>
+                            </GridItem>
+                        </Center>
+                    )}
+                    <Center>
+                        <GridItem colSpan={1} rowSpan={1} margin={3}>
+                            {answer && <Latex>{answer}</Latex>}
+                        </GridItem>
+                    </Center>
+                </Box>
+            </Grid>
+        </Center>
+    );
 }
