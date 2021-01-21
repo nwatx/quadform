@@ -62,24 +62,24 @@ export default function Home() {
         const det = calculateDeterminant();
         if (det > 0) {
             setAnswer(
-                `$$=\\frac{-${formatNumber(b)} \\pm \\sqrt{${formatNumber(
+                `$$=\\frac{${formatNumber(-b)} \\pm \\sqrt{${formatNumber(
                     b
                 )}^2-4(${formatNumber(a)})(${formatNumber(
                     c
                 )})}}{2(${formatNumber(a)})}$$
-                 $$=\\frac{-${b} \\pm ${formatNumber(
+                 $$=\\frac{${-b} \\pm ${formatNumber(
                     Math.sqrt(b * b - 4 * a * c)
                 )}}{${formatNumber(2 * a)}}$$
                  $$x_1 = ${formatNumber(
-                     -b + Math.sqrt(b * b - 4 * a * c) / 2
+                     (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a)
                  )}, x_2 =${formatNumber(
-                    -b - Math.sqrt(b * b - 4 * a * c) / 2
+                    (-b - Math.sqrt(b * b - 4 * a * c)) / (2 * a)
                 )}$$`
             );
         } else if (det == 0) {
             setAnswer(
-                `$$=\\frac{-${formatNumber(b)}}{2(${formatNumber(a)})}$$
-                 $$=\\frac{-${b}}{${formatNumber(2 * a)}}$$
+                `$$=\\frac{${formatNumber(-b)}}{2(${formatNumber(a)})}$$
+                 $$=\\frac{${-b}}{${formatNumber(2 * a)}}$$
                  $$x = ${formatNumber((-b / 2) * a)}$$`
             );
         } else {
@@ -141,7 +141,7 @@ export default function Home() {
                             <SliderTrack>
                                 <SliderFilledTrack />
                             </SliderTrack>
-                            <SliderThumb fontSize="sm" boxSize="32px" border />
+                            <SliderThumb bg='red.500' borderWidth='1px' fontSize="sm" boxSize="32px" border />
                         </Slider>
                     </GridItem>
                     <Center>
