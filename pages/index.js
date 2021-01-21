@@ -103,7 +103,7 @@ export default function Home() {
                 m={1}
                 gap={1}
             >
-                <Box w="100%" borderWidth="2px" borderRadius='md' shadow='md' m={5} pt={10} pb={5} px={10}>
+                <Box w="100%" borderWidth="2px" borderRadius='lg' shadow='md' m={5} pt={10} pb={5} px={10}>
                     <Center>
                         <GridItem rowSpan={1}>
                             <Text fontSize="4xl" color="red.400">
@@ -118,7 +118,7 @@ export default function Home() {
                     </GridItem>
                     <GridItem>
                         <Center>
-                            <Text fontSize="2xl">Set precision</Text>
+                            <Text fontSize="2xl" color='red.400'><b>Set precision</b></Text>
                         </Center>
                         <NumberInput
                             maxW="50px"
