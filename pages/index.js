@@ -62,9 +62,9 @@ export default function Home() {
         const det = calculateDeterminant();
         if (det > 0) {
             setAnswer(
-                `$$=\\frac{${formatNumber(-b)} \\pm \\sqrt{${formatNumber(
+                `$$=\\frac{${formatNumber(-b)} \\pm \\sqrt{(${formatNumber(
                     b
-                )}^2-4(${formatNumber(a)})(${formatNumber(
+                )})^2-4(${formatNumber(a)})(${formatNumber(
                     c
                 )})}}{2(${formatNumber(a)})}$$
                  $$=\\frac{${-b} \\pm ${formatNumber(
