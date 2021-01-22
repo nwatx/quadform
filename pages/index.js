@@ -97,13 +97,13 @@ export default function Home() {
     return (
         <Center>
             <Grid
-                w={["100%", "30%"]}
+                w={["100%", "85%", "70%", "30%"]}
                 autoRows
                 bg="primary"
                 m={1}
                 gap={1}
             >
-                <Box w="100%" borderWidth="2px" borderRadius='lg' shadow='md' m={5} pt={10} pb={5} px={10}>
+                <Box w="100%" borderWidth={["0px", "2px"]} borderRadius='lg' shadow='md' m={[0, 0, 5]} pt={10} pb={5} px={[3, 4, 10]}>
                     <Center>
                         <GridItem rowSpan={1}>
                             <Text fontSize="4xl" color="red.400">
